@@ -1,5 +1,14 @@
 const formulario = document.querySelector("#form-perfil");
 const erroFormulario = document.querySelector("#erro-formulario");
+const usuarioSalvo = localStorage.getItem("usuario");
+const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+if (usuario) {
+    document.querySelector("#nome").value = usuario.nome;
+    document.querySelector("#idade").value = usuario.idade;
+    const checkboxesGeneros = document.querySelectorAll('input[name="genero"]');
+    checkboxesGeneros.forEach((checkbox) => {
+    checkbox.checked = usuario.generosFavoritos.includes(checkbox.value);});
+}
 
 formulario.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -17,5 +26,6 @@ formulario.addEventListener("submit", (event) => {
     nome,
     idade,
     generosFavoritos,};
+    localStorage.setItem("usuario", JSON.stringify(usuario));
 });
 
