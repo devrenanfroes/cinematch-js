@@ -2,6 +2,9 @@ const formulario = document.querySelector("#form-perfil");
 const erroFormulario = document.querySelector("#erro-formulario");
 const usuarioSalvo = localStorage.getItem("usuario");
 const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
+const botaoTrocarPerfil = document.querySelector("#trocar-perfil");
+botaoTrocarPerfil.hidden = !usuario;
+
 if (usuario) {
     document.querySelector("#nome").value = usuario.nome;
     document.querySelector("#idade").value = usuario.idade;
@@ -27,5 +30,13 @@ formulario.addEventListener("submit", (event) => {
     idade,
     generosFavoritos,};
     localStorage.setItem("usuario", JSON.stringify(usuario));
+    botaoTrocarPerfil.hidden = false;
 });
+botaoTrocarPerfil.addEventListener("click", () => {
+    localStorage.removeItem("usuario");
+    formulario.reset();
+    erroFormulario.textContent = "";
+    botaoTrocarPerfil.hidden = true;
+});
+
 
