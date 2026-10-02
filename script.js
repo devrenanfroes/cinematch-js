@@ -57,7 +57,9 @@ formulario.addEventListener("submit", (event) => {
     });
 
     contarRecalculo();
+    setTimeout(() => {
     buscarCatalogo();
+    }, 2500);
 });
 
 botaoTrocarPerfil.addEventListener("click", () => {
