@@ -6,6 +6,7 @@ import {
     statusCatalogo,
     preencherFormulario,
     limparFormulario,
+    renderizarCatalogo,
 } from "./ui.js";
 
 const usuarioSalvo = localStorage.getItem("usuario");
@@ -80,6 +81,7 @@ async function buscarCatalogo() {
         }
 
         statusCatalogo.textContent = "";
+        renderizarCatalogo(catalogo);
         return catalogo;
     } catch (erro) {
         console.error("Erro ao buscar catálogo:", erro);

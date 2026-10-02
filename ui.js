@@ -20,3 +20,40 @@ export function limparFormulario() {
     formulario.reset();
     erroFormulario.textContent = "";
 }
+
+export function renderizarCatalogo(catalogo) {
+    const secaoCatalogo = document.querySelector(
+        '[aria-labelledby="catalogo-titulo"]'
+    );
+
+    secaoCatalogo
+        .querySelectorAll(".card-serie")
+        .forEach((card) => card.remove());
+
+    catalogo.forEach((serie) => {
+        const card = document.createElement("article");
+        card.classList.add("card-serie");
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = serie.titulo;
+
+        if (serie.imagem) {
+            const imagem = document.createElement("img");
+            imagem.src = serie.imagem;
+            imagem.alt = `Capa da série ${serie.titulo}`;
+            card.appendChild(imagem);
+        }
+
+        const generos = document.createElement("p");
+        generos.textContent = `Gêneros: ${serie.generos.join(", ")}`;
+
+        const nota = document.createElement("p");
+        nota.textContent = `Nota: ${serie.nota ?? "N/A"}`;
+
+        card.appendChild(titulo);
+        card.appendChild(generos);
+        card.appendChild(nota);
+
+        secaoCatalogo.appendChild(card);
+    });
+}
