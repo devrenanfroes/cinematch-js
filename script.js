@@ -21,6 +21,17 @@ function exibirBoasVindas(nome, callback) {
     callback(`Olá, ${nome}! Vamos encontrar séries que combinam com você.`);
 }
 
+function criarContadorRecalculos() {
+    let total = 0;
+
+    return function () {
+        total += 1;
+        return total;
+    };
+}
+
+const contarRecalculo = criarContadorRecalculos();
+
 formulario.addEventListener("submit", (event) => {
     event.preventDefault();
     erroFormulario.textContent = "";
@@ -45,6 +56,7 @@ formulario.addEventListener("submit", (event) => {
     statusCatalogo.textContent = mensagem;
     });
 
+    contarRecalculo();
     buscarCatalogo();
 });
 
