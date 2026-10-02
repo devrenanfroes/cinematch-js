@@ -41,11 +41,17 @@ botaoTrocarPerfil.addEventListener("click", () => {
 });
 
 async function buscarCatalogo() {
-    const resposta = await fetch("https://api.tvmaze.com/shows");
-    const catalogo = await resposta.json();
+    try {
+        const resposta = await fetch("https://api.tvmaze.com/shows");
 
-    return catalogo;
+        if (!resposta.ok) {
+            throw new Error(`Erro HTTP: ${resposta.status}`);
+        }
+
+        const catalogo = await resposta.json();
+        return catalogo;
+    } catch (erro) {
+        console.error("Erro ao buscar catálogo:", erro);
+        return [];
+    }
 }
-
-
-
