@@ -22,13 +22,9 @@ export function limparFormulario() {
 }
 
 export function renderizarCatalogo(catalogo) {
-    const secaoCatalogo = document.querySelector(
-        '[aria-labelledby="catalogo-titulo"]'
-    );
+    const listaCatalogo = document.querySelector("#lista-catalogo");
 
-    secaoCatalogo
-        .querySelectorAll(".card-serie")
-        .forEach((card) => card.remove());
+    listaCatalogo.innerHTML = "";
 
     catalogo.forEach((serie) => {
         const card = document.createElement("article");
@@ -54,6 +50,6 @@ export function renderizarCatalogo(catalogo) {
         card.appendChild(generos);
         card.appendChild(nota);
 
-        secaoCatalogo.appendChild(card);
+        listaCatalogo.appendChild(card);
     });
 }

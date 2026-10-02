@@ -50,6 +50,44 @@ button {
     border-radius: 0.25rem;
     cursor: pointer;
 }
+#trocar-perfil {
+    display: block;
+    width: auto;
+    max-width: 40rem;
+    margin: 1rem auto 0;
+}
+#lista-catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 1.5rem auto 0;
+}
+
+.card-serie {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1 1 220px;
+    max-width: 280px;
+    padding: 1rem;
+    border: 1px solid #d6d6d6;
+    border-radius: 0.5rem;
+}
+
+.card-serie img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+}
+
+.card-serie h3 {
+    margin: 0.5rem 0 0;
+}
+
+.card-serie p {
+    margin: 0;
+}
 @media (min-width: 768px) {
     main {
         width: 80%;
