@@ -32,11 +32,20 @@ formulario.addEventListener("submit", (event) => {
     localStorage.setItem("usuario", JSON.stringify(usuario));
     botaoTrocarPerfil.hidden = false;
 });
+
 botaoTrocarPerfil.addEventListener("click", () => {
     localStorage.removeItem("usuario");
     formulario.reset();
     erroFormulario.textContent = "";
     botaoTrocarPerfil.hidden = true;
 });
+
+async function buscarCatalogo() {
+    const resposta = await fetch("https://api.tvmaze.com/shows");
+    const catalogo = await resposta.json();
+
+    return catalogo;
+}
+
 
 
