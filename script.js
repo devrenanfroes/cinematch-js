@@ -1,18 +1,20 @@
-const formulario = document.querySelector("#form-perfil");
-const erroFormulario = document.querySelector("#erro-formulario");
+import { Serie } from "./modelo.js";
+import {
+    formulario,
+    erroFormulario,
+    botaoTrocarPerfil,
+    statusCatalogo,
+    preencherFormulario,
+    limparFormulario,
+} from "./ui.js";
+
 const usuarioSalvo = localStorage.getItem("usuario");
 const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
-const botaoTrocarPerfil = document.querySelector("#trocar-perfil");
+
 botaoTrocarPerfil.hidden = !usuario;
-const statusCatalogo = document.querySelector("#status-catalogo");
 
 if (usuario) {
-    document.querySelector("#nome").value = usuario.nome;
-    document.querySelector("#idade").value = usuario.idade;
-    const checkboxesGeneros = document.querySelectorAll('input[name="genero"]');
-    checkboxesGeneros.forEach((checkbox) => {
-        checkbox.checked = usuario.generosFavoritos.includes(checkbox.value);
-    });
+    preencherFormulario(usuario);
 }
 
 formulario.addEventListener("submit", (event) => {
@@ -41,78 +43,9 @@ formulario.addEventListener("submit", (event) => {
 
 botaoTrocarPerfil.addEventListener("click", () => {
     localStorage.removeItem("usuario");
-    formulario.reset();
-    erroFormulario.textContent = "";
+    limparFormulario();
     botaoTrocarPerfil.hidden = true;
 });
-
-class Conteudo {
-    constructor(titulo, generos) {
-        this.titulo = titulo;
-        this.generos = generos;
-    }
-
-    exibirResumo() {
-        return `${this.titulo} - ${this.generos.join(", ")}`;
-    }
-}
-
-class Serie extends Conteudo {
-    constructor(id, titulo, generos, nota, imagem, resumo) {
-        super(titulo, generos);
-
-        this.id = id;
-        this.nota = nota;
-        this.imagem = imagem;
-        this.resumo = resumo;
-    }
-
-    exibirResumo() {
-        return `${this.titulo} - Nota: ${this.nota ?? "N/A"}`;
-    }
-}
-
-function calcularGeneros(usuario, serie) {
-    const generosEmComum = serie.generos.filter((genero) =>
-        usuario.generosFavoritos.includes(genero)
-    );
-
-    const generosNaoExplorados = serie.generos.filter(
-        (genero) => !usuario.generosFavoritos.includes(genero)
-    );
-
-    return {
-        generosEmComum,
-        generosNaoExplorados,
-    };
-}
-function classificarAfinidade(percentual) {
-    if (percentual >= 80) {
-        return "Alta afinidade";
-    }
-
-    if (percentual >= 50) {
-        return "Média afinidade";
-    }
-
-    return "Baixa afinidade";
-}
-
-function calcularCompatibilidade(usuario, serie) {
-    const { generosEmComum, generosNaoExplorados } =
-        calcularGeneros(usuario, serie);
-
-    const percentual =
-        (generosEmComum.length / serie.generos.length) * 100;
-
-    return {
-        serie,
-        percentual,
-        generosEmComum,
-        generosNaoExplorados,
-        classificacao: classificarAfinidade(percentual),
-    };
-}
 
 async function buscarCatalogo() {
     statusCatalogo.textContent = "Carregando catálogo...";
