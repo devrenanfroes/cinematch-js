@@ -72,6 +72,21 @@ class Serie extends Conteudo {
     }
 }
 
+function calcularGeneros(usuario, serie) {
+    const generosEmComum = serie.generos.filter((genero) =>
+        usuario.generosFavoritos.includes(genero)
+    );
+
+    const generosNaoExplorados = serie.generos.filter(
+        (genero) => !usuario.generosFavoritos.includes(genero)
+    );
+
+    return {
+        generosEmComum,
+        generosNaoExplorados,
+    };
+}
+
 async function buscarCatalogo() {
     statusCatalogo.textContent = "Carregando catálogo...";
 
