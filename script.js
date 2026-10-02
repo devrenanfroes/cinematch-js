@@ -86,6 +86,33 @@ function calcularGeneros(usuario, serie) {
         generosNaoExplorados,
     };
 }
+function classificarAfinidade(percentual) {
+    if (percentual >= 80) {
+        return "Alta afinidade";
+    }
+
+    if (percentual >= 50) {
+        return "Média afinidade";
+    }
+
+    return "Baixa afinidade";
+}
+
+function calcularCompatibilidade(usuario, serie) {
+    const { generosEmComum, generosNaoExplorados } =
+        calcularGeneros(usuario, serie);
+
+    const percentual =
+        (generosEmComum.length / serie.generos.length) * 100;
+
+    return {
+        serie,
+        percentual,
+        generosEmComum,
+        generosNaoExplorados,
+        classificacao: classificarAfinidade(percentual),
+    };
+}
 
 async function buscarCatalogo() {
     statusCatalogo.textContent = "Carregando catálogo...";
