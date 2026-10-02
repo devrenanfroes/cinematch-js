@@ -17,6 +17,9 @@ botaoTrocarPerfil.hidden = !usuario;
 if (usuario) {
     preencherFormulario(usuario);
 }
+function exibirBoasVindas(nome, callback) {
+    callback(`Olá, ${nome}! Vamos encontrar séries que combinam com você.`);
+}
 
 formulario.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -38,6 +41,9 @@ formulario.addEventListener("submit", (event) => {
     };
     localStorage.setItem("usuario", JSON.stringify(usuario));
     botaoTrocarPerfil.hidden = false;
+    exibirBoasVindas(usuario.nome, (mensagem) => {
+    statusCatalogo.textContent = mensagem;
+    });
 
     buscarCatalogo();
 });
