@@ -56,7 +56,19 @@ async function buscarCatalogo() {
             throw new Error(`Erro HTTP: ${resposta.status}`);
         }
 
-        const catalogo = await resposta.json();
+        const dados = await resposta.json();
+        const catalogo = dados
+            .filter((serie) => serie.genres.length > 0)
+            .sort((a, b) => (b.rating.average ?? 0) - (a.rating.average ?? 0))
+            .slice(0, 20)
+            .map((serie) => ({
+                id: serie.id,
+                titulo: serie.name,
+                generos: serie.genres,
+                nota: serie.rating.average,
+                imagem: serie.image?.medium ?? null,
+                resumo: serie.summary,
+        }));
 
         if (catalogo.length === 0) {
             statusCatalogo.textContent = "Nenhuma série encontrada.";
