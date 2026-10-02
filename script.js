@@ -11,8 +11,8 @@ if (usuario) {
     document.querySelector("#idade").value = usuario.idade;
     const checkboxesGeneros = document.querySelectorAll('input[name="genero"]');
     checkboxesGeneros.forEach((checkbox) => {
-    checkbox.checked = usuario.generosFavoritos.includes(checkbox.value);
-});
+        checkbox.checked = usuario.generosFavoritos.includes(checkbox.value);
+    });
 }
 
 formulario.addEventListener("submit", (event) => {
@@ -21,17 +21,17 @@ formulario.addEventListener("submit", (event) => {
     const nome = document.querySelector("#nome").value.trim();
     const idade = Number(document.querySelector("#idade").value);
     const generosSelecionados = document.querySelectorAll(
-    'input[name="genero"]:checked');
+        'input[name="genero"]:checked');
     const generosFavoritos = Array.from(generosSelecionados).map(
-    (genero) => genero.value);
+        (genero) => genero.value);
     if (generosFavoritos.length === 0) {
-    erroFormulario.textContent = "Selecione pelo menos um gênero favorito.";
-    return;
+        erroFormulario.textContent = "Selecione pelo menos um gênero favorito.";
+        return;
     }
     const usuario = {
-    nome,
-    idade,
-    generosFavoritos,
+        nome,
+        idade,
+        generosFavoritos,
     };
     localStorage.setItem("usuario", JSON.stringify(usuario));
     botaoTrocarPerfil.hidden = false;
@@ -46,6 +46,32 @@ botaoTrocarPerfil.addEventListener("click", () => {
     botaoTrocarPerfil.hidden = true;
 });
 
+class Conteudo {
+    constructor(titulo, generos) {
+        this.titulo = titulo;
+        this.generos = generos;
+    }
+
+    exibirResumo() {
+        return `${this.titulo} - ${this.generos.join(", ")}`;
+    }
+}
+
+class Serie extends Conteudo {
+    constructor(id, titulo, generos, nota, imagem, resumo) {
+        super(titulo, generos);
+
+        this.id = id;
+        this.nota = nota;
+        this.imagem = imagem;
+        this.resumo = resumo;
+    }
+
+    exibirResumo() {
+        return `${this.titulo} - Nota: ${this.nota ?? "N/A"}`;
+    }
+}
+
 async function buscarCatalogo() {
     statusCatalogo.textContent = "Carregando catálogo...";
 
@@ -57,18 +83,21 @@ async function buscarCatalogo() {
         }
 
         const dados = await resposta.json();
+
         const catalogo = dados
             .filter((serie) => serie.genres.length > 0)
             .sort((a, b) => (b.rating.average ?? 0) - (a.rating.average ?? 0))
             .slice(0, 20)
-            .map((serie) => ({
-                id: serie.id,
-                titulo: serie.name,
-                generos: serie.genres,
-                nota: serie.rating.average,
-                imagem: serie.image?.medium ?? null,
-                resumo: serie.summary,
-        }));
+            .map((serie) =>
+                new Serie(
+                    serie.id,
+                    serie.name,
+                    serie.genres,
+                    serie.rating.average,
+                    serie.image?.medium ?? null,
+                    serie.summary
+                )
+            );
 
         if (catalogo.length === 0) {
             statusCatalogo.textContent = "Nenhuma série encontrada.";
