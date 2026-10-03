@@ -29,10 +29,17 @@
         <section aria-labelledby="perfil-titulo">
             <h2 id="perfil-titulo">Crie seu perfil</h2>
             <form id="form-perfil">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" required>
-                <label for="idade">Idade</label>
-                <input type="number" id="idade" name="idade" min="1" required>
+                <div class="dados-perfil">
+                    <div class="campo campo-nome">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+
+                    <div class="campo campo-idade">
+                        <label for="idade">Idade</label>
+                        <input type="number" id="idade" name="idade" min="1" required>
+                    </div>
+                </div>
                 <fieldset>
                     <legend>Gêneros favoritos</legend>
                     <label>
