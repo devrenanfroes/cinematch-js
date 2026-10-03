@@ -88,21 +88,67 @@ button {
 .card-serie p {
     margin: 0;
 }
+@media (max-width: 767px) {
+    main {
+        width: 92%;
+        padding: 1rem 0;
+    }
+
+    header {
+        padding: 1rem 4%;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    #lista-catalogo {
+        flex-direction: column;
+    }
+
+    .card-serie {
+        width: 100%;
+        max-width: none;
+        flex-basis: auto;
+    }
+
+    #trocar-perfil {
+        width: 100%;
+    }
+}
+
 @media (min-width: 768px) {
     main {
         width: 80%;
     }
+
     h1 {
         max-width: 40rem;
         margin-left: auto;
         margin-right: auto;
     }
+
     section > h2 {
         max-width: 40rem;
         margin-left: auto;
         margin-right: auto;
     }
+
     form {
         margin: 0 auto;
+    }
+
+    .card-serie {
+        flex: 1 1 220px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-serie {
+        flex-basis: 240px;
     }
 }
