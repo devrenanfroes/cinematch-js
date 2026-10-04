@@ -147,6 +147,8 @@ async function buscarCatalogo(usuarioAtual, callback) {
                 "Não encontramos séries compatíveis com os gêneros selecionados.";
 
             renderizarCatalogo([]);
+            botaoTrocarPerfil.hidden = false;
+            
             return [];
         }
 

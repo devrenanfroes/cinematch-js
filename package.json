@@ -1,10 +1,9 @@
 {
   "name": "cinematch",
   "version": "1.0.0",
-  "description": "Sistema interativo de recomendação de filmes e séries desenvolvido em JavaScript e Node.js.",
-  "main": "index.js",
+  "description": "Aplicação web de recomendação de séries desenvolvida com HTML, CSS e JavaScript.",
   "scripts": {
-  "start": "live-server"
+    "start": "live-server"
   },
   "repository": {
     "type": "git",
