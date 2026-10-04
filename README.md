@@ -1,125 +1,68 @@
 # CineMatch JS
 
-Link da apresentação em video:
-https://drive.google.com/file/d/1lWJpCNs3ftNH6_wp-tMLDQY69hbbtnFl/view?usp=sharing
+Aplicação web de recomendação de séries desenvolvida com HTML, CSS e JavaScript.
 
+O CineMatch utiliza os gêneros favoritos informados pelo usuário para buscar séries e calcular a compatibilidade com cada conteúdo.
 
-## Sobre o projeto
-
-O CineMatch JS é um projeto desenvolvido em JavaScript com Node.js que simula um sistema de recomendação de filmes e séries.
-
-A aplicação funciona pelo terminal. Primeiro, o usuário informa seu nome, idade e gêneros favoritos. Depois disso, o sistema compara essas preferências com um catálogo de conteúdos e calcula a compatibilidade com cada filme ou série.
-
-O projeto foi desenvolvido para o Mini-Projeto Avaliativo do curso de Desenvolvimento Mobile com React Native.
-
-## Objetivo
-
-O objetivo principal do projeto foi praticar os conteúdos estudados durante o módulo, utilizando JavaScript em uma aplicação interativa executada pelo terminal.
-
-Durante o desenvolvimento foram aplicados conceitos como:
-
-- variáveis
-- tipos de dados
-- operadores
-- condicionais
-- estruturas de repetição
-- funções
-- arrow functions
-- arrays
-- métodos de array
-- objetos
-- classes
-- construtores
-- herança
-- uso do `this`
-- callbacks
-- closures
-- Promises
-- async/await
-- entrada de dados pelo terminal
-- versionamento com Git e GitHub
-- organização de tarefas com Kanban
+O projeto foi desenvolvido como atividade avaliativa do curso de Desenvolvimento Mobile com React Native.
 
 ## Funcionalidades
 
-O sistema permite:
+A aplicação permite:
 
 - criar um perfil com nome, idade e gêneros favoritos
-- visualizar o perfil informado
-- visualizar o catálogo de filmes e séries
-- calcular a compatibilidade entre o usuário e cada conteúdo
-- mostrar os gêneros em comum
-- mostrar os gêneros ainda não explorados
-- classificar o nível de afinidade
-- encontrar o conteúdo com maior compatibilidade
-- gerar uma recomendação personalizada
-- navegar pelas funcionalidades através de um menu interativo
+- salvar o perfil no navegador com `localStorage`
+- restaurar automaticamente um perfil salvo
+- trocar de perfil
+- buscar séries reais através da API TVMaze
+- calcular os gêneros em comum
+- mostrar gêneros ainda não explorados
+- calcular o percentual de compatibilidade
+- classificar a recomendação em alta, média ou baixa afinidade
+- ordenar as recomendações pela compatibilidade
+- exibir as séries em cards
+- informar estados de carregamento, erro e ausência de resultados
 
 ## Como funciona a compatibilidade
 
-O sistema compara os gêneros favoritos informados pelo usuário com os gêneros cadastrados em cada conteúdo.
+O sistema compara os gêneros favoritos do usuário com os gêneros de cada série.
 
 O cálculo utilizado é:
 
-```
+```text
 quantidade de gêneros em comum
 -------------------------------- x 100
-total de gêneros do conteúdo
+total de gêneros da série
 ```
 
 A classificação é feita da seguinte forma:
 
 - 80% a 100%: Alta afinidade
 - 50% a 79%: Média afinidade
-- 0% a 49%: Baixa afinidade
+- abaixo de 50%: Baixa afinidade
 
-## Catálogo
-
-O projeto possui três conteúdos fictícios:
-
-### Fronteira Digital
-
-- Tipo: Série
-- Gêneros: Ação e Ficção Científica
-- Duração: 45 minutos
-- Temporadas: 2
-
-### Risadas de Sábado
-
-- Tipo: Filme
-- Gêneros: Comédia e Romance
-- Duração: 98 minutos
-
-### Sombras do Porão
-
-- Tipo: Filme
-- Gêneros: Terror e Suspense
-- Duração: 110 minutos
+As séries que não possuem nenhum gênero em comum com o perfil não são exibidas nas recomendações.
 
 ## Tecnologias utilizadas
 
+- HTML
+- CSS
 - JavaScript
+- API TVMaze
 - Node.js
-- prompt-sync
+- npm
+- live-server
+- localStorage
 - Git
 - GitHub
 - GitHub Projects
-- VS Code
-
-## Requisitos
-
-Para executar o projeto é necessário ter:
-
-- Node.js instalado
-- npm instalado
-- Git, caso queira clonar o repositório
 
 ## Como executar
 
 Clone o repositório:
 
 ```bash
-git clone https://github.com/devrenann/cinematch-js
+git clone https://github.com/devrenanfroes/cinematch-js.git
 ```
 
 Entre na pasta do projeto:
@@ -134,45 +77,24 @@ Instale as dependências:
 npm install
 ```
 
-Execute o projeto:
+Inicie o servidor local:
 
 ```bash
-node cinematch.js
+npm start
 ```
 
-Depois disso, basta responder às perguntas exibidas no terminal e utilizar o menu.
-
-## Exemplo de execução
-
-```text
-********************************
-             CINEMATCH
-********************************
-
-Qual é o seu nome? Renan
-Qual é a sua idade? 28
-Quais gêneros você mais gosta? Ação, Comédia
-
-Perfil criado com sucesso!
-
-Carregando catálogo...
-Catálogo carregado com sucesso!
-
-********************************
-             CINEMATCH
-********************************
-(1) - Ver meu perfil
-(2) - Ver catálogo completo
-(3) - Calcular compatibilidade com todos os conteúdos
-(4) - Ver o conteúdo mais recomendado
-(5) - Sair
-```
+Depois disso, o projeto será aberto no navegador através do `live-server`.
 
 ## Estrutura do projeto
 
 ```text
 cinematch-js/
 │
+├── index.html
+├── style.css
+├── script.js
+├── ui.js
+├── modelo.js
 ├── cinematch.js
 ├── package.json
 ├── package-lock.json
@@ -180,116 +102,162 @@ cinematch-js/
 └── .gitignore
 ```
 
-O arquivo `cinematch.js` possui a lógica principal da aplicação.
+### index.html
 
-O `package.json` contém as informações do projeto e suas dependências.
+Contém a estrutura da página, o formulário de criação do perfil e a área onde as recomendações são exibidas.
 
-O `package-lock.json` registra as versões das dependências instaladas.
+### style.css
 
-O `.gitignore` impede que arquivos que não precisam ser enviados ao repositório, como `node_modules`, sejam versionados.
+Contém os estilos da aplicação e os ajustes de responsividade para diferentes tamanhos de tela.
 
-## Conceitos de JavaScript utilizados
+### script.js
 
-### Arrays e métodos de array
+Controla o fluxo principal da aplicação, incluindo o formulário, o perfil salvo, a busca do catálogo e o carregamento das recomendações.
 
-O catálogo e os gêneros são armazenados em arrays.
+### ui.js
 
-Durante o projeto utilizei os métodos:
+Contém as funções relacionadas à interface, como exibição das seções, mensagens para o usuário e criação dos cards das séries.
 
-- `filter()`, para encontrar gêneros em comum e gêneros não explorados
-- `map()`, para calcular a compatibilidade de todos os conteúdos
-- `reduce()`, para encontrar o conteúdo com maior compatibilidade
+### modelo.js
 
-Também utilizei `forEach()` para exibir conteúdos no menu.
+Contém as classes e as funções responsáveis pelo cálculo dos gêneros e da compatibilidade.
 
-### Classes e herança
+### cinematch.js
 
-Foi criada uma classe chamada `Conteudo`, que representa os conteúdos do catálogo.
+É o arquivo da primeira versão do CineMatch, desenvolvida para funcionar pelo terminal com Node.js.
 
-Também foi criada a classe `Serie`, que herda de `Conteudo` utilizando `extends`.
+Ele foi mantido no repositório para preservar a evolução do projeto.
 
-A classe `Serie` possui uma informação específica, que é a quantidade de temporadas.
+## API TVMaze
 
-### Uso do this
+Na versão web, o catálogo de séries é obtido através da API pública TVMaze.
 
-O `this` foi utilizado dentro das classes para acessar os atributos dos objetos, como título, tipo, gêneros e duração.
+A aplicação utiliza `fetch()` com `async/await` para fazer a requisição e transforma os dados recebidos antes de mostrar as recomendações.
 
-### Callback
+Também são tratados casos de:
 
-Foi criada uma função de finalização do onboarding que recebe outra função como parâmetro.
+- erro na requisição
+- resposta HTTP inválida
+- ausência de séries compatíveis
+- séries sem imagem
+- séries sem nota
 
-Essa função é executada quando o usuário escolhe sair do sistema.
+## Métodos de array
 
-### Closure
+Durante o processamento do catálogo são utilizados métodos de array como:
 
-Foi criado um contador de recomendações utilizando closure.
+- `filter()`
+- `map()`
+- `sort()`
+- `forEach()`
+- `slice()`
 
-O contador mantém internamente a quantidade de vezes que uma recomendação foi solicitada durante a execução do programa.
+O `filter()` é utilizado para selecionar séries válidas e recomendações que possuem gêneros em comum com o usuário.
 
-### Promise
+O `map()` transforma os dados recebidos da API em objetos e também é utilizado no cálculo das recomendações.
 
-O carregamento do catálogo é simulado através de uma Promise.
+O `sort()` organiza os resultados pelo percentual de compatibilidade e pela nota da série.
 
-Foi utilizado um `setTimeout()` para representar o tempo que uma aplicação poderia levar para receber dados de um servidor.
+O `slice()` limita a quantidade de recomendações exibidas.
 
-### Async e Await
+O `forEach()` é utilizado para criar os cards das séries no DOM.
 
-A função responsável por iniciar o sistema utiliza `async/await` para aguardar o carregamento do catálogo antes de mostrar o menu para o usuário.
+## Classes e herança
 
-## var, let e const
+O projeto possui uma classe chamada `Conteudo`, que representa as informações básicas de um conteúdo.
 
-Durante o projeto foram priorizados `const` e `let`.
+A classe `Serie` herda de `Conteudo` utilizando `extends`.
 
-Usei `const` para valores que não precisam receber uma nova atribuição durante a execução.
+O `this` é utilizado dentro das classes para acessar os atributos de cada objeto.
 
-Usei `let` em situações onde o valor precisa mudar, como na opção escolhida pelo usuário dentro do menu.
+## Callback
 
-Não foi necessário utilizar `var` neste projeto.
+A função responsável pela busca do catálogo pode receber uma função de callback.
 
-## Como a internet funciona
+Depois que as recomendações são carregadas com sucesso, o callback é executado para atualizar a mensagem apresentada ao usuário.
 
-De forma resumida, a internet permite que computadores e outros dispositivos se comuniquem através de redes.
+## Closure
 
-Quando acessamos um site ou aplicativo, normalmente o dispositivo envia uma solicitação para outro computador que possui os dados ou serviços necessários.
+Foi criado um contador de recálculos utilizando closure.
 
-Esse computador responde à solicitação e envia os dados de volta.
+A variável responsável pela contagem fica dentro da função e mantém seu valor durante a execução atual da página.
 
-## Arquitetura cliente-servidor
+## setTimeout
 
-Em uma arquitetura cliente-servidor, o cliente é a parte que solicita informações e o servidor é responsável por processar a solicitação e devolver uma resposta.
+O `setTimeout()` é utilizado no fluxo de carregamento das recomendações.
 
-Por exemplo, em uma plataforma real de streaming, o aplicativo poderia solicitar ao servidor uma lista de filmes disponíveis.
+Após o usuário criar um perfil, uma mensagem de carregamento é exibida antes da busca do catálogo.
 
-Neste projeto não existe um servidor real.
+## localStorage
 
-A função que utiliza Promise e `setTimeout()` simula esse comportamento, como se o catálogo estivesse sendo carregado de um servidor antes de ser utilizado pela aplicação.
+O perfil do usuário é salvo no navegador utilizando `localStorage`.
 
-## VS Code e extensões
+Antes de salvar, o objeto é convertido para texto utilizando `JSON.stringify()`.
 
-O projeto foi desenvolvido utilizando o Visual Studio Code.
+Para recuperar o perfil, é utilizado `JSON.parse()`.
 
-Não foi necessária nenhuma extensão específica para executar o projeto, pois o VS Code já possui suporte para desenvolvimento em JavaScript.
+Quando existe um perfil salvo, a aplicação pode abrir diretamente a área de recomendações.
 
-O terminal integrado do VS Code também foi utilizado durante o desenvolvimento e os testes.
+O botão **Trocar perfil** remove o perfil salvo e permite preencher o formulário novamente.
+
+## Módulos ES e CommonJS
+
+A versão web utiliza módulos ES no navegador.
+
+O arquivo principal é carregado no HTML com:
+
+```html
+<script type="module" src="script.js"></script>
+```
+
+Os arquivos `script.js`, `ui.js` e `modelo.js` utilizam `import` e `export` para compartilhar funções e classes.
+
+O projeto também mantém `"type": "commonjs"` no `package.json`.
+
+Isso acontece porque o arquivo `cinematch.js`, que pertence à primeira versão do projeto executada pelo terminal, utiliza CommonJS e a biblioteca `prompt-sync`.
+
+Dessa forma, o repositório mantém as duas etapas do projeto:
+
+- CommonJS na versão de terminal
+- ES Modules na versão web
+
+## Acessibilidade
+
+Foram utilizados alguns recursos de acessibilidade, como:
+
+- elementos HTML semânticos
+- `label` associado aos campos do formulário
+- `fieldset` e `legend` para os gêneros
+- mensagens com `aria-live`
+- foco visível durante a navegação por teclado
+- texto alternativo nas imagens das séries
+- navegação pelo teclado
+
+## Responsividade
+
+A interface foi desenvolvida utilizando Flexbox e abordagem mobile-first.
+
+Também foram adicionados ajustes para telas menores e para visualização em desktop.
 
 ## Organização com Kanban
 
-As tarefas do projeto foram organizadas utilizando o GitHub Projects.
+As tarefas do projeto foram organizadas utilizando GitHub Projects.
 
-O quadro foi dividido nas seguintes colunas:
+O quadro foi utilizado durante o desenvolvimento para acompanhar as tarefas desde o planejamento até os testes e a preparação da entrega.
+
+As principais colunas utilizadas foram:
 
 - Backlog
 - A Fazer
 - Em Andamento
+- Revisão
 - Concluído
-
-As tarefas foram movimentadas entre as colunas conforme o desenvolvimento avançava.
 
 ## Versionamento
 
 O projeto foi versionado utilizando Git e GitHub.
 
-Foram utilizadas branches para separar partes do desenvolvimento.
+As principais branches utilizadas na versão web foram:
 
 ### main
 
@@ -297,36 +265,34 @@ Branch principal do projeto.
 
 ### develop
 
-Branch utilizada para reunir as funcionalidades durante o desenvolvimento antes da versão final.
+Branch utilizada para reunir o desenvolvimento antes da versão final.
 
-### feat/perfil-interativo
+### feature/cinematch-web
 
-Utilizada para desenvolver a coleta dos dados do usuário através do terminal.
+Branch utilizada durante o desenvolvimento da versão web do CineMatch.
 
-### feat/classes-poo
+Os commits foram realizados durante as diferentes etapas para registrar a evolução do projeto.
 
-Utilizada durante o desenvolvimento das classes, herança e outras funcionalidades relacionadas ao projeto.
+## Versão anterior em terminal
 
-### docs/readme
+Antes da versão web, o CineMatch foi desenvolvido como uma aplicação executada pelo terminal utilizando Node.js e `prompt-sync`.
 
-Utilizada para criação e atualização da documentação do projeto.
+Essa versão continua disponível no arquivo:
 
-Os commits também foram realizados durante diferentes etapas do desenvolvimento para registrar a evolução do projeto.
+```text
+cinematch.js
+```
 
-## Possíveis melhorias
+Para executar a versão de terminal:
 
-Algumas melhorias que poderiam ser implementadas futuramente são:
+```bash
+node cinematch.js
+```
 
-- permitir cadastrar mais filmes e séries
-- melhorar o tratamento de entradas digitadas pelo usuário
-- evitar diferenças entre gêneros digitados com letras maiúsculas ou minúsculas
-- adicionar uma interface gráfica
-- buscar conteúdos através de uma API real
-- salvar as preferências do usuário
-- permitir realizar novas buscas sem reiniciar o programa
+## Apresentação em vídeo
+
+O link da apresentação da versão web será adicionado após a gravação final.
 
 ## Autor
 
-Renan Santos
-
-
+Renan Fróes
