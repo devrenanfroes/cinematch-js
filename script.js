@@ -5,19 +5,15 @@ import {
     erroFormulario,
     botaoTrocarPerfil,
     statusCatalogo,
-    preencherFormulario,
     limparFormulario,
+    limparCatalogo,
+    mostrarPerfil,
+    mostrarCatalogo,
     renderizarCatalogo,
 } from "./ui.js";
 
 const usuarioSalvo = localStorage.getItem("usuario");
 const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
-
-botaoTrocarPerfil.hidden = !usuario;
-
-if (usuario) {
-    preencherFormulario(usuario);
-}
 
 function exibirBoasVindas(nome, callback) {
     callback(
@@ -35,6 +31,17 @@ function criarContadorRecalculos() {
 }
 
 const contarRecalculo = criarContadorRecalculos();
+
+if (usuario) {
+    mostrarCatalogo();
+
+    statusCatalogo.textContent =
+        `Carregando recomendações para ${usuario.nome}...`;
+
+    buscarCatalogo(usuario);
+} else {
+    mostrarPerfil();
+}
 
 formulario.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -64,8 +71,12 @@ formulario.addEventListener("submit", (event) => {
         generosFavoritos,
     };
 
-    localStorage.setItem("usuario", JSON.stringify(novoUsuario));
-    botaoTrocarPerfil.hidden = false;
+    localStorage.setItem(
+        "usuario",
+        JSON.stringify(novoUsuario)
+    );
+
+    mostrarCatalogo();
 
     exibirBoasVindas(novoUsuario.nome, (mensagem) => {
         statusCatalogo.textContent = mensagem;
@@ -80,14 +91,17 @@ formulario.addEventListener("submit", (event) => {
 
 botaoTrocarPerfil.addEventListener("click", () => {
     localStorage.removeItem("usuario");
+
     limparFormulario();
-    botaoTrocarPerfil.hidden = true;
-    statusCatalogo.textContent = "";
+    limparCatalogo();
+    mostrarPerfil();
 });
 
 async function buscarCatalogo(usuarioAtual) {
     try {
-        const resposta = await fetch("https://api.tvmaze.com/shows");
+        const resposta = await fetch(
+            "https://api.tvmaze.com/shows"
+        );
 
         if (!resposta.ok) {
             throw new Error(`Erro HTTP: ${resposta.status}`);
@@ -122,13 +136,15 @@ async function buscarCatalogo(usuarioAtual) {
                     return b.percentual - a.percentual;
                 }
 
-                return (b.serie.nota ?? 0) - (a.serie.nota ?? 0);
+                return (b.serie.nota ?? 0) -
+                    (a.serie.nota ?? 0);
             })
             .slice(0, 20);
 
         if (recomendacoes.length === 0) {
             statusCatalogo.textContent =
                 "Não encontramos séries compatíveis com os gêneros selecionados.";
+
             renderizarCatalogo([]);
             return [];
         }
@@ -136,12 +152,19 @@ async function buscarCatalogo(usuarioAtual) {
         statusCatalogo.textContent = "";
         renderizarCatalogo(recomendacoes);
 
+        botaoTrocarPerfil.hidden = false;
+
         return recomendacoes;
     } catch (erro) {
-        console.error("Erro ao buscar catálogo:", erro);
+        console.error(
+            "Erro ao buscar catálogo:",
+            erro
+        );
 
         statusCatalogo.textContent =
             "Não foi possível carregar as recomendações. Tente novamente.";
+
+        botaoTrocarPerfil.hidden = false;
 
         return [];
     }

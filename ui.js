@@ -2,25 +2,30 @@ export const formulario = document.querySelector("#form-perfil");
 export const erroFormulario = document.querySelector("#erro-formulario");
 export const botaoTrocarPerfil = document.querySelector("#trocar-perfil");
 export const statusCatalogo = document.querySelector("#status-catalogo");
-
-export function preencherFormulario(usuario) {
-    document.querySelector("#nome").value = usuario.nome;
-    document.querySelector("#idade").value = usuario.idade;
-
-    const checkboxesGeneros = document.querySelectorAll(
-        'input[name="genero"]'
-    );
-
-    checkboxesGeneros.forEach((checkbox) => {
-        checkbox.checked = usuario.generosFavoritos.includes(
-            checkbox.value
-        );
-    });
-}
+export const secaoPerfil = document.querySelector("#secao-perfil");
+export const secaoCatalogo = document.querySelector("#secao-catalogo");
 
 export function limparFormulario() {
     formulario.reset();
     erroFormulario.textContent = "";
+}
+
+export function limparCatalogo() {
+    const listaCatalogo = document.querySelector("#lista-catalogo");
+
+    listaCatalogo.innerHTML = "";
+    statusCatalogo.textContent = "";
+}
+
+export function mostrarPerfil() {
+    secaoPerfil.hidden = false;
+    secaoCatalogo.hidden = true;
+    botaoTrocarPerfil.hidden = true;
+}
+
+export function mostrarCatalogo() {
+    secaoPerfil.hidden = true;
+    secaoCatalogo.hidden = false;
 }
 
 export function renderizarCatalogo(recomendacoes) {
