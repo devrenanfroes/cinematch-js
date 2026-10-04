@@ -10,15 +10,15 @@ import {
     mostrarPerfil,
     mostrarCatalogo,
     renderizarCatalogo,
+    atualizarContadorRecalculos,
 } from "./ui.js";
 
 const usuarioSalvo = localStorage.getItem("usuario");
 const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
 
-function exibirBoasVindas(nome, callback) {
-    callback(
-        `Buscando recomendações para ${nome}... Estamos comparando seus gêneros favoritos com o catálogo.`
-    );
+function exibirBoasVindas(nome) {
+    statusCatalogo.textContent =
+        `Pronto, ${nome}! Suas recomendações foram carregadas.`;
 }
 
 function criarContadorRecalculos() {
@@ -35,10 +35,9 @@ const contarRecalculo = criarContadorRecalculos();
 if (usuario) {
     mostrarCatalogo();
 
-    statusCatalogo.textContent =
-        `Carregando recomendações para ${usuario.nome}...`;
-
-    buscarCatalogo(usuario);
+    buscarCatalogo(usuario, () => {
+        exibirBoasVindas(usuario.nome);
+    });
 } else {
     mostrarPerfil();
 }
@@ -78,14 +77,16 @@ formulario.addEventListener("submit", (event) => {
 
     mostrarCatalogo();
 
-    exibirBoasVindas(novoUsuario.nome, (mensagem) => {
-        statusCatalogo.textContent = mensagem;
-    });
+    const totalRecalculos = contarRecalculo();
+    atualizarContadorRecalculos(totalRecalculos);
 
-    contarRecalculo();
+    statusCatalogo.textContent =
+    `Buscando recomendações para ${novoUsuario.nome}...`;
 
     setTimeout(() => {
-        buscarCatalogo(novoUsuario);
+        buscarCatalogo(novoUsuario, () => {
+            exibirBoasVindas(novoUsuario.nome);
+        });
     }, 1800);
 });
 
@@ -97,7 +98,7 @@ botaoTrocarPerfil.addEventListener("click", () => {
     mostrarPerfil();
 });
 
-async function buscarCatalogo(usuarioAtual) {
+async function buscarCatalogo(usuarioAtual, callback) {
     try {
         const resposta = await fetch(
             "https://api.tvmaze.com/shows"
@@ -151,9 +152,11 @@ async function buscarCatalogo(usuarioAtual) {
 
         statusCatalogo.textContent = "";
         renderizarCatalogo(recomendacoes);
-
         botaoTrocarPerfil.hidden = false;
 
+        if (callback) {
+            callback();
+        }
         return recomendacoes;
     } catch (erro) {
         console.error(

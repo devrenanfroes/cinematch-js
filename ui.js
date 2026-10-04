@@ -4,6 +4,8 @@ export const botaoTrocarPerfil = document.querySelector("#trocar-perfil");
 export const statusCatalogo = document.querySelector("#status-catalogo");
 export const secaoPerfil = document.querySelector("#secao-perfil");
 export const secaoCatalogo = document.querySelector("#secao-catalogo");
+export const contadorRecalculos =
+    document.querySelector("#contador-recalculos");
 
 export function limparFormulario() {
     formulario.reset();
@@ -26,6 +28,10 @@ export function mostrarPerfil() {
 export function mostrarCatalogo() {
     secaoPerfil.hidden = true;
     secaoCatalogo.hidden = false;
+}
+export function atualizarContadorRecalculos(total) {
+    contadorRecalculos.textContent =
+        `Recálculos nesta sessão: ${total}`;
 }
 function traduzirGenero(genero) {
     const traducoes = {
