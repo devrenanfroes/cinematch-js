@@ -1,4 +1,5 @@
-import { Serie } from "./modelo.js";
+import { Serie, calcularCompatibilidade } from "./modelo.js";
+
 import {
     formulario,
     erroFormulario,
@@ -17,8 +18,11 @@ botaoTrocarPerfil.hidden = !usuario;
 if (usuario) {
     preencherFormulario(usuario);
 }
+
 function exibirBoasVindas(nome, callback) {
-    callback(`Olá, ${nome}! Vamos encontrar séries que combinam com você.`);
+    callback(
+        `Buscando recomendações para ${nome}... Estamos comparando seus gêneros favoritos com o catálogo.`
+    );
 }
 
 function criarContadorRecalculos() {
@@ -34,43 +38,54 @@ const contarRecalculo = criarContadorRecalculos();
 
 formulario.addEventListener("submit", (event) => {
     event.preventDefault();
+
     erroFormulario.textContent = "";
+
     const nome = document.querySelector("#nome").value.trim();
     const idade = Number(document.querySelector("#idade").value);
+
     const generosSelecionados = document.querySelectorAll(
-        'input[name="genero"]:checked');
+        'input[name="genero"]:checked'
+    );
+
     const generosFavoritos = Array.from(generosSelecionados).map(
-        (genero) => genero.value);
+        (genero) => genero.value
+    );
+
     if (generosFavoritos.length === 0) {
-        erroFormulario.textContent = "Selecione pelo menos um gênero favorito.";
+        erroFormulario.textContent =
+            "Selecione pelo menos um gênero favorito.";
         return;
     }
-    const usuario = {
+
+    const novoUsuario = {
         nome,
         idade,
         generosFavoritos,
     };
-    localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    localStorage.setItem("usuario", JSON.stringify(novoUsuario));
     botaoTrocarPerfil.hidden = false;
-    exibirBoasVindas(usuario.nome, (mensagem) => {
-    statusCatalogo.textContent = mensagem;
+
+    exibirBoasVindas(novoUsuario.nome, (mensagem) => {
+        statusCatalogo.textContent = mensagem;
     });
 
     contarRecalculo();
+
     setTimeout(() => {
-    buscarCatalogo();
-    }, 2500);
+        buscarCatalogo(novoUsuario);
+    }, 1800);
 });
 
 botaoTrocarPerfil.addEventListener("click", () => {
     localStorage.removeItem("usuario");
     limparFormulario();
     botaoTrocarPerfil.hidden = true;
+    statusCatalogo.textContent = "";
 });
 
-async function buscarCatalogo() {
-    statusCatalogo.textContent = "Carregando catálogo...";
-
+async function buscarCatalogo(usuarioAtual) {
     try {
         const resposta = await fetch("https://api.tvmaze.com/shows");
 
@@ -80,33 +95,54 @@ async function buscarCatalogo() {
 
         const dados = await resposta.json();
 
-        const catalogo = dados
+        const series = dados
             .filter((serie) => serie.genres.length > 0)
-            .sort((a, b) => (b.rating.average ?? 0) - (a.rating.average ?? 0))
-            .slice(0, 20)
-            .map((serie) =>
-                new Serie(
-                    serie.id,
-                    serie.name,
-                    serie.genres,
-                    serie.rating.average,
-                    serie.image?.medium ?? null,
-                    serie.summary
-                )
+            .map(
+                (serie) =>
+                    new Serie(
+                        serie.id,
+                        serie.name,
+                        serie.genres,
+                        serie.rating.average,
+                        serie.image?.medium ?? null,
+                        serie.summary
+                    )
             );
 
-        if (catalogo.length === 0) {
-            statusCatalogo.textContent = "Nenhuma série encontrada.";
+        const recomendacoes = series
+            .map((serie) =>
+                calcularCompatibilidade(usuarioAtual, serie)
+            )
+            .filter(
+                (resultado) =>
+                    resultado.generosEmComum.length > 0
+            )
+            .sort((a, b) => {
+                if (b.percentual !== a.percentual) {
+                    return b.percentual - a.percentual;
+                }
+
+                return (b.serie.nota ?? 0) - (a.serie.nota ?? 0);
+            })
+            .slice(0, 20);
+
+        if (recomendacoes.length === 0) {
+            statusCatalogo.textContent =
+                "Não encontramos séries compatíveis com os gêneros selecionados.";
+            renderizarCatalogo([]);
             return [];
         }
 
         statusCatalogo.textContent = "";
-        renderizarCatalogo(catalogo);
-        return catalogo;
+        renderizarCatalogo(recomendacoes);
+
+        return recomendacoes;
     } catch (erro) {
         console.error("Erro ao buscar catálogo:", erro);
+
         statusCatalogo.textContent =
-            "Não foi possível carregar o catálogo. Tente novamente.";
+            "Não foi possível carregar as recomendações. Tente novamente.";
+
         return [];
     }
 }

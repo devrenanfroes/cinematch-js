@@ -12,7 +12,9 @@ export function preencherFormulario(usuario) {
     );
 
     checkboxesGeneros.forEach((checkbox) => {
-        checkbox.checked = usuario.generosFavoritos.includes(checkbox.value);
+        checkbox.checked = usuario.generosFavoritos.includes(
+            checkbox.value
+        );
     });
 }
 
@@ -21,12 +23,14 @@ export function limparFormulario() {
     erroFormulario.textContent = "";
 }
 
-export function renderizarCatalogo(catalogo) {
+export function renderizarCatalogo(recomendacoes) {
     const listaCatalogo = document.querySelector("#lista-catalogo");
 
     listaCatalogo.innerHTML = "";
 
-    catalogo.forEach((serie) => {
+    recomendacoes.forEach((resultado) => {
+        const serie = resultado.serie;
+
         const card = document.createElement("article");
         card.classList.add("card-serie");
 
@@ -41,13 +45,19 @@ export function renderizarCatalogo(catalogo) {
         }
 
         const generos = document.createElement("p");
-        generos.textContent = `Gêneros: ${serie.generos.join(", ")}`;
+        generos.textContent =
+            `Gêneros: ${serie.generos.join(", ")}`;
+
+        const compatibilidade = document.createElement("p");
+        compatibilidade.textContent =
+            `${Math.round(resultado.percentual)}% de compatibilidade`;
 
         const nota = document.createElement("p");
         nota.textContent = `Nota: ${serie.nota ?? "N/A"}`;
 
         card.appendChild(titulo);
         card.appendChild(generos);
+        card.appendChild(compatibilidade);
         card.appendChild(nota);
 
         listaCatalogo.appendChild(card);
