@@ -4,7 +4,7 @@
   "description": "Sistema interativo de recomendação de filmes e séries desenvolvido em JavaScript e Node.js.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "start": "live-server"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "homepage": "https://github.com/devrenann/cinematch-js#readme",
   "dependencies": {
     "prompt-sync": "^4.2.0"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "live-server": "^1.2.2"
   }
 }
