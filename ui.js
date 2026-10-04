@@ -27,7 +27,29 @@ export function mostrarCatalogo() {
     secaoPerfil.hidden = true;
     secaoCatalogo.hidden = false;
 }
+function traduzirGenero(genero) {
+    const traducoes = {
+        Action: "Ação",
+        Adventure: "Aventura",
+        Comedy: "Comédia",
+        Crime: "Crime",
+        Drama: "Drama",
+        Family: "Família",
+        Fantasy: "Fantasia",
+        History: "História",
+        Horror: "Terror",
+        Music: "Música",
+        Mystery: "Mistério",
+        Romance: "Romance",
+        "Science-Fiction": "Ficção científica",
+        Sports: "Esportes",
+        Thriller: "Suspense",
+        Anime: "Anime",
+        Supernatural: "Sobrenatural"
+    };
 
+    return traducoes[genero] ?? genero;
+}
 export function renderizarCatalogo(recomendacoes) {
     const listaCatalogo = document.querySelector("#lista-catalogo");
 
@@ -39,9 +61,6 @@ export function renderizarCatalogo(recomendacoes) {
         const card = document.createElement("article");
         card.classList.add("card-serie");
 
-        const titulo = document.createElement("h3");
-        titulo.textContent = serie.titulo;
-
         if (serie.imagem) {
             const imagem = document.createElement("img");
             imagem.src = serie.imagem;
@@ -49,20 +68,37 @@ export function renderizarCatalogo(recomendacoes) {
             card.appendChild(imagem);
         }
 
-        const generos = document.createElement("p");
-        generos.textContent =
-            `Gêneros: ${serie.generos.join(", ")}`;
+        const titulo = document.createElement("h3");
+        titulo.textContent = serie.titulo;
+
+        const generosEmComum = document.createElement("p");
+        generosEmComum.textContent =
+            `Em comum: ${resultado.generosEmComum
+            .map(traduzirGenero)
+            .join(", ")}`;
+        const generosNaoExplorados = document.createElement("p");
+        generosNaoExplorados.textContent =
+            resultado.generosNaoExplorados.length > 0
+                ? `Não explorados: ${resultado.generosNaoExplorados
+                    .map(traduzirGenero)
+                    .join(", ")}`
+                : "Não explorados: nenhum";
 
         const compatibilidade = document.createElement("p");
         compatibilidade.textContent =
-            `${Math.round(resultado.percentual)}% de compatibilidade`;
+            `Compatibilidade: ${Math.round(resultado.percentual)}%`;
+
+        const classificacao = document.createElement("p");
+        classificacao.textContent = resultado.classificacao;
 
         const nota = document.createElement("p");
         nota.textContent = `Nota: ${serie.nota ?? "N/A"}`;
 
         card.appendChild(titulo);
-        card.appendChild(generos);
+        card.appendChild(generosEmComum);
+        card.appendChild(generosNaoExplorados);
         card.appendChild(compatibilidade);
+        card.appendChild(classificacao);
         card.appendChild(nota);
 
         listaCatalogo.appendChild(card);
