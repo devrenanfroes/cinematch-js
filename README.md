@@ -1,5 +1,9 @@
 # CineMatch JS
 
+Acesse o projeto online por aqui: [https://cinematch-js-devrenanfroes.vercel.app](https://cinematch-js-devrenanfroes.vercel.app)
+
+Video de apresentação do projeto: [https://drive.google.com/file/d/1su8HLyqqs-WA6grQnPmrvfbmAdhI9Zq9/view?usp=sharing](https://drive.google.com/file/d/1su8HLyqqs-WA6grQnPmrvfbmAdhI9Zq9/view?usp=sharing)
+
 Aplicação web de recomendação de séries desenvolvida com HTML, CSS e JavaScript.
 
 O CineMatch utiliza os gêneros favoritos informados pelo usuário para buscar séries e calcular a compatibilidade com cada conteúdo.
