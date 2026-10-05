@@ -31,7 +31,7 @@ export function mostrarCatalogo() {
 }
 export function atualizarContadorRecalculos(total) {
     contadorRecalculos.textContent =
-        `Recálculos nesta sessão: ${total}`;
+        `Cálculos nesta sessão: ${total}`;
 }
 function traduzirGenero(genero) {
     const traducoes = {
